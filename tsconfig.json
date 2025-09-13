@@ -1,0 +1,26 @@
+{
+    "compilerOptions": {
+      // "noEmit": true,
+      "module": "NodeNext",
+      "target": "ESNext",
+      "moduleResolution": "NodeNext",
+      "resolveJsonModule": true,
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+
+      "rootDir": "src",
+      "outDir": "build",
+      "emitDeclarationOnly": false,
+
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+
+      "baseUrl": "./src",
+      "paths": {
+        "#menus": ["./menus/index.js"],
+      }
+    },
+    "include": ["src"],
+    "exclude": ["node_modules", "deprecated", "dist", "build"],
+  }
