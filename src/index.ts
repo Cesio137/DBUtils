@@ -1,12 +1,5 @@
-import { main } from "#menus";
 import ck from "chalk";
-import * as citty from "citty";
+import { backup } from "#utils";
 
 console.log(ck.blue("💾 Database Utilities"));
-
-citty.runMain({
-    meta: {},
-    run() {
-        main();
-    },
-});
+await backup();

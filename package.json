@@ -1,42 +1,47 @@
 {
-    "name": "dbutils",
-    "version": "0.0.1",
-    "description": "",
-    "main": "build/index.js",
-    "scripts": {
-        "build": "tsup",
-        "dev": "tsx ./src/index.ts",
-        "tsx": "tsx",
-        "check": "tsc --noEmit && echo ✔ Ok"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Cesio137/DBUtils.git"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "MIT",
-    "type": "module",
-    "bugs": {
-        "url": "https://github.com/Cesio137/DBUtils/issues"
-    },
-    "homepage": "https://github.com/Cesio137/DBUtils#readme",
-    "devDependencies": {
-        "@types/node": "^22.18.3",
-        "tsup": "^8.5.0",
-        "tsx": "^4.20.5",
-        "typescript": "^5.9.2"
-    },
-    "dependencies": {
-        "@googleapis/drive": "^15.0.0",
-        "@inquirer/prompts": "^7.8.4",
-        "chalk": "^5.6.2",
-        "citty": "^0.1.6",
-        "node-cron": "^4.2.1"
-    },
-    "imports": {
-        "#menus": [
-            "./build/menus/index.js"
-        ]
-    }
+  "name": "dbutils",
+  "version": "0.0.1",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsx --env-file .env ./src/index.ts",
+    "tsx": "tsx",
+    "start": "node --env-file .env .",
+    "check": "tsc --noEmit && echo ✔ Ok"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cesio137/DBUtils.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Cesio137/DBUtils/issues"
+  },
+  "homepage": "https://github.com/Cesio137/DBUtils#readme",
+  "devDependencies": {
+    "@types/node": "^22.18.3",
+    "tsup": "^8.5.0",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "dropbox": "^10.34.0",
+    "node-cron": "^4.2.1"
+  },
+  "imports": {
+    "#helpers": [
+      "./build/helpers/index.js"
+    ],
+    "#types": [
+      "./build/types/index.js"
+    ],
+    "#utils": [
+      "./build/utils/index.js"
+    ]
+  }
 }

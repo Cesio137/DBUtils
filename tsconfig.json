@@ -18,7 +18,9 @@
 
       "baseUrl": "./src",
       "paths": {
-        "#menus": ["./menus/index.js"],
+        "#helpers": ["./helpers/index.js"],
+        "#types": ["./types/index.js"],
+        "#utils": ["./utils/index.js"]
       }
     },
     "include": ["src"],
