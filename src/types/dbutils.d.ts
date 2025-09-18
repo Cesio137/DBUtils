@@ -1,4 +1,4 @@
-export type DrivePlatform = "onedrive" | "dropbox" | "mega";
+export type DrivePlatform = "dropbox" | "mega";
 
 export type CronjbConfig = {
     min: number | 0

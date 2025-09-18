@@ -18,9 +18,10 @@
 
       "baseUrl": "./src",
       "paths": {
-        "#helpers": ["./helpers/index.js"],
-        "#types": ["./types/index.js"],
-        "#utils": ["./utils/index.js"]
+        "#env": ["./env.ts"],
+        "#helpers": ["./helpers/index.ts"],
+        "#types": ["./types/index.ts"],
+        "#utils": ["./utils/index.ts"]
       }
     },
     "include": ["src"],

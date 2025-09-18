@@ -1,13 +1,13 @@
 import { Dropbox } from 'dropbox';
 import fs from "node:fs";
-import { config } from '#helpers';
 import ck from "chalk";
+import { env } from '#env';
 
-export async function upload() {
-    const dropbox = new Dropbox({ accessToken: config.dropbox.token });
+export async function dbxUpload() {
+    const dropbox = new Dropbox({ accessToken: env.DROPBOX_TOKEN });
 
     let hasError = false;
-    const fstream = fs.createReadStream(`${config.filepath}`, { highWaterMark: config.chunk_size });
+    const fstream = fs.createReadStream(`${env.FILEPATH}`, { highWaterMark: env.CHUNK_SIZE });
     fstream.on("readable", async function() {
         let sessionId: string = "";
         let offset = 0;
@@ -51,13 +51,13 @@ export async function upload() {
         await dropbox.filesUploadSessionFinish({
             cursor: { session_id: sessionId, offset },
             commit: {
-                path: `${config.drivepath}`,
+                path: `${env.DRIVEPATH}`,
                 mode: { ".tag": "add" },
                 autorename: true,
                 mute: false
             }
         }).then(function() {
-            console.log(ck.blueBright(`${config.filepath} has been uploaded.`));
+            console.log(ck.blueBright(`${env.DRIVEPATH} has been uploaded.`));
         }).catch(function(reason) {
             hasError = true;
             console.log(ck.redBright(reason));

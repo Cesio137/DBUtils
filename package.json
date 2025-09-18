@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/Cesio137/DBUtils#readme",
   "devDependencies": {
-    "@types/node": "^22.18.3",
+    "@types/node": "^22.18.6",
     "tsup": "^8.5.0",
     "tsx": "^4.20.5",
     "typescript": "^5.9.2"
@@ -31,9 +31,13 @@
   "dependencies": {
     "chalk": "^5.6.2",
     "dropbox": "^10.34.0",
-    "node-cron": "^4.2.1"
+    "node-cron": "^4.2.1",
+    "zod": "^4.1.9"
   },
   "imports": {
+    "#env": [
+      "./build/env.js"
+    ],
     "#helpers": [
       "./build/helpers/index.js"
     ],
