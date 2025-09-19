@@ -1,6 +1,7 @@
 import { env } from "#env";
 import { MutableFile, Storage } from "megajs";
-import { createReadStream, read } from "fs";
+import { createReadStream } from "fs";
+import ck from "chalk";
 
 export async function getLoggedInStorage () {
   const email = env.MEGA_EMAIL || ""
@@ -29,6 +30,7 @@ export async function megaUpload() {
             }
             file = file.upload({ name: env.DRIVEPATH }, chunk);
         }
+        console.log(ck.blueBright(`${env.DRIVEPATH} has been uploaded.`));
     })
 
     console.log("Upload concluído com sucesso!");
