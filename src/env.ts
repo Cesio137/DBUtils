@@ -2,7 +2,7 @@ import { validateEnv } from "#helpers";
 import ck from "chalk";
 import { z } from "zod";
 
-function getEnv() {
+function validateSchema() {
     const envSchema = validateEnv(z.object({
         PLATFORM: z.enum(["dropbox", "mega"]),
         SCHEDULE: z.string(`Expected ${ck.underline("* * * * * *")}`).min(11),
@@ -10,14 +10,19 @@ function getEnv() {
         DRIVEPATH: z.string("Expected file name, path").min(1),
         CHUNK_SIZE: z.string("Expected chunk size in bytes").min(1).transform(Number),
         DROPBOX_TOKEN: z.string().optional(),
+        MEGA_EMAIL: z.string().optional(),
+        MEGA_PASS: z.string().optional(),
     }));
 
     if (envSchema.PLATFORM === "dropbox" && typeof envSchema.DROPBOX_TOKEN === "undefined") {
         console.error("Expected dropbox token");
+        process.exit(-1);
+    } else if (envSchema.PLATFORM === "mega" && (typeof envSchema.MEGA_EMAIL === "undefined" || typeof envSchema.MEGA_PASS === "undefined")) {
+        console.error("Expected mega credentials");
         process.exit(-1);
     }
 
     return envSchema;
 }
 
-export const env = getEnv();
+export const env = validateSchema();

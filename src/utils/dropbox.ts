@@ -3,9 +3,9 @@ import fs from "node:fs";
 import ck from "chalk";
 import { env } from '#env';
 
-export async function dbxUpload() {
-    const dropbox = new Dropbox({ accessToken: env.DROPBOX_TOKEN });
+const dropbox = new Dropbox({ accessToken: env.DROPBOX_TOKEN });
 
+export async function dbxUpload() {
     let hasError = false;
     const fstream = fs.createReadStream(`${env.FILEPATH}`, { highWaterMark: env.CHUNK_SIZE });
     fstream.on("readable", async function() {
