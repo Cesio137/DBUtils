@@ -6,61 +6,49 @@ import { env } from '#env';
 const dropbox = new Dropbox({ accessToken: env.DROPBOX_TOKEN });
 
 export async function dbxUpload() {
-    let hasError = false;
-    const fstream = fs.createReadStream(`${env.FILEPATH}`, { highWaterMark: env.CHUNK_SIZE });
-    fstream.on("readable", async function() {
-        let sessionId: string = "";
+    const fstream = fs.createReadStream(env.FILEPATH, { highWaterMark: env.CHUNK_SIZE });
+
+    try {
+        let sessionId: string | undefined;
         let offset = 0;
-        
-        let chunk: string | Buffer<ArrayBufferLike>;
-        while (null !== (chunk = fstream.read())) {
-            if (sessionId === "") {
-                await dropbox.filesUploadSessionStart({
+        let chunkData: string | Buffer<ArrayBufferLike>;
+        for await (const chunk of fstream) {
+            chunkData = chunk;
+            if (!sessionId) {
+                const response = await dropbox.filesUploadSessionStart({
                     close: false,
-                    contents: chunk
-                }).then(function(res) {
-                    sessionId = res.result.session_id;
-                }).catch(function(reason) {
-                    fstream.close(function (error) {
-                        const code = typeof error?.code === "undefined" ? 0 : error.code;
-                        const message = typeof error?.message === "undefined" ? "Failed to close file." : error.message;
-                        console.log(ck.red(`Error code: ${code}\n${message}`))
-                    });
-                    hasError = true;
-                    console.log(ck.redBright(reason));
+                    contents: chunkData
                 });
+                sessionId = response.result.session_id;
             } else {
                 await dropbox.filesUploadSessionAppendV2({
                     cursor: { session_id: sessionId, offset },
                     close: false,
-                    contents: chunk
-                }).catch(function(reason) {
-                    fstream.close(function (error) {
-                        const code = typeof error?.code === "undefined" ? 0 : error.code;
-                        const message = typeof error?.message === "undefined" ? "Failed to close file." : error.message;
-                        console.log(ck.red(`Error code: ${code}\n${message}`))
-                    });
-                    hasError = true;
-                    console.log(ck.redBright(reason));
+                    contents: chunkData
                 });
             }
-            if (hasError) return;
-            offset += chunk.length;
+            offset += chunkData.length;
+        }
+
+        if (!sessionId) {
+            console.log(ck.yellow("File is empty, nothing to upload."));
+            return;
         }
 
         await dropbox.filesUploadSessionFinish({
-            cursor: { session_id: sessionId, offset },
+            cursor: { session_id: sessionId, offset: offset },
             commit: {
-                path: `${env.DRIVEPATH}`,
+                path: env.DRIVEPATH,
                 mode: { ".tag": "add" },
                 autorename: true,
                 mute: false
             }
-        }).then(function() {
-            console.log(ck.blueBright(`${env.DRIVEPATH} has been uploaded.`));
-        }).catch(function(reason) {
-            hasError = true;
-            console.log(ck.redBright(reason));
         });
-    });
+
+        console.log(ck.blueBright(`${env.DRIVEPATH} has been uploaded.`));
+        fstream.close();
+    } catch (error) {
+        console.error(ck.redBright("An error occurred during Dropbox upload:"));
+        console.error(ck.red(error));
+    }
 }

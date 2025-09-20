@@ -51,6 +51,14 @@
 
 - Set your dropbox app token.
 - Setup an app [here](https://www.dropbox.com/developers/apps)
+- 
+#### MEGA_EMAIL
+
+- Set your mega email.
+
+#### MEGA_PASS
+
+- Set your mega password.
 
 ## Scripts
 
