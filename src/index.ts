@@ -1,5 +1,11 @@
+import { env } from "#env";
+import { discloudToMongo, mongoToDiscloud } from "#utils";
 import ck from "chalk";
-import { backup } from "#utils";
 
 console.log(ck.blue("💾 Database Utilities"));
-await backup();
+
+if (env.MIGRATE_TO === "discloud") {
+    await mongoToDiscloud();
+} else {
+    await discloudToMongo();
+}
