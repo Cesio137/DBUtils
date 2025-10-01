@@ -1,33 +1,41 @@
+import fetch from "node-fetch";
 import { Dropbox } from 'dropbox';
-import fs from "node:fs";
 import ck from "chalk";
 import { env } from '#env';
+import { user } from '#tools';
 
 const dropbox = new Dropbox({ accessToken: env.DROPBOX_TOKEN });
 
 export async function dbxUpload() {
-    const fstream = fs.createReadStream(env.FILEPATH, { highWaterMark: env.CHUNK_SIZE });
+    const app = await user.apps.fetch(env.APPID);
+    const backup = await app.backup();
+    const url = backup.url;
+
+    const response = await fetch(url);
+    if (!response.ok || !response.body) {
+        console.log(ck.red("Failed to download file from discloud"));
+        return;
+    }
+    const stream = response.body;
 
     try {
         let sessionId: string | undefined;
         let offset = 0;
-        let chunkData: string | Buffer<ArrayBufferLike>;
-        for await (const chunk of fstream) {
-            chunkData = chunk;
+        for await (const chunk of stream) {
             if (!sessionId) {
                 const response = await dropbox.filesUploadSessionStart({
                     close: false,
-                    contents: chunkData
+                    contents: chunk
                 });
                 sessionId = response.result.session_id;
             } else {
                 await dropbox.filesUploadSessionAppendV2({
                     cursor: { session_id: sessionId, offset },
                     close: false,
-                    contents: chunkData
+                    contents: chunk
                 });
             }
-            offset += chunkData.length;
+            offset += chunk.length;
         }
 
         if (!sessionId) {
@@ -38,7 +46,7 @@ export async function dbxUpload() {
         await dropbox.filesUploadSessionFinish({
             cursor: { session_id: sessionId, offset: offset },
             commit: {
-                path: env.DRIVEPATH,
+                path: env.DRIVEPATH || `/${app.name}.zip`,
                 mode: { ".tag": "add" },
                 autorename: true,
                 mute: false
@@ -46,9 +54,8 @@ export async function dbxUpload() {
         });
 
         console.log(ck.blueBright(`${env.DRIVEPATH} has been uploaded.`));
-        fstream.close();
     } catch (error) {
-        console.error(ck.redBright("An error occurred during Dropbox upload:"));
+        console.error(ck.redBright("An error occurred during Dropbox upload: "));
         console.error(ck.red(error));
     }
 }

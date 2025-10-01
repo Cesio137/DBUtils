@@ -31,21 +31,19 @@
     | month        | 1-12 (or names)                   |
     | day of week  | 0-7 (or names, 0 or 7 are sunday) |
 
-#### FILEPATH
+#### DISCLOUD_TOKEN
 
-- Specifies the local path to the file intended for upload.
-- If the file is located in the root directory, simply provide the filename (e.g., `text.txt`).
-- If the file resides within a subdirectory, use a relative path format such as `./example/text.txt.`
+- Your discloud api key.
+  
+#### APPID
+
+- Set the app id of your database.
 
 
 #### DRIVEPATH
 
 - Defines the destination path for the uploaded file within the cloud storage service.
 - For Dropbox, use a full path format like `/example/text.txt.`
-
-#### CHUNK_SIZE
-
-- Defines max size of chunk when stream a big file.
 
 #### DROPBOX_TOKEN
 
