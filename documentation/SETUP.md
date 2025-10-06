@@ -19,7 +19,7 @@
 #### COLLECTION_NAME
 
 - Specify a collection
-- It's optional but if set you mest set `DB_NAME` too
+- It's optional but if set you must set `DB_NAME` too
 
 #### LOCALHOST_URI
 
