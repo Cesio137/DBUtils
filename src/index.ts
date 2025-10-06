@@ -1,11 +1,11 @@
 import { env } from "#env";
-import { discloudToMongo, mongoToDiscloud } from "#utils";
+import { atlasToDiscloud, discloudToAtlas } from "#utils";
 import ck from "chalk";
 
 console.log(ck.blue("💾 Database Utilities"));
 
-if (env.MIGRATE_TO === "discloud") {
-    await mongoToDiscloud();
+if (env.TASK === "import") {
+    await atlasToDiscloud();
 } else {
-    await discloudToMongo();
+    await discloudToAtlas();
 }

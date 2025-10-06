@@ -3,69 +3,34 @@
 ## Download and Install
 
 - [Nodejs 22 LTS or above](https://nodejs.org/)
+- [MongoDB database tools](https://www.mongodb.com/try/download/database-tools)
+## Env vars
 
-## Config .env
+#### TASK
 
-#### PLATAFORM
-- values: "dropbox" or "mega"
+- Set script task to import ou export
+- Default values: `import` and `export`
 
-#### SCHEDULE
-- value = "* * * * * *"
-   ```
-    # ┌────────────── second (optional)
-    # │ ┌──────────── minute
-    # │ │ ┌────────── hour
-    # │ │ │ ┌──────── day of month
-    # │ │ │ │ ┌────── month
-    # │ │ │ │ │ ┌──── day of week
-    # │ │ │ │ │ │
-    # │ │ │ │ │ │
-    # * * * * * *
-    ```
-    | field        | value                             |
-    | ------------ | --------------------------------- |
-    | second       | 0-59                              |
-    | minute       | 0-59                              |
-    | hour         | 0-23                              |
-    | day of month | 1-31                              |
-    | month        | 1-12 (or names)                   |
-    | day of week  | 0-7 (or names, 0 or 7 are sunday) |
+#### DB_NAME=""
 
-#### FILEPATH
+- Specify a database
+- It's optional
 
-- Specifies the local path to the file intended for upload.
-- If the file is located in the root directory, simply provide the filename (e.g., `text.txt`).
-- If the file resides within a subdirectory, use a relative path format such as `./example/text.txt.`
+#### COLLECTION_NAME
+
+- Specify a collection
+- It's optional but if set you mest set `DB_NAME` too
+
+#### LOCALHOST_URI
+
+- Localhost database uri
+
+#### ATLAS_URI
+
+- Mongodb atlas database uri
+
+#### OUT_DIR
+
+- Dir to save data
 
 
-#### DRIVEPATH
-
-- Defines the destination path for the uploaded file within the cloud storage service.
-- For Dropbox, use a full path format like `/example/text.txt.`
-
-#### CHUNK_SIZE
-
-- Defines max size of chunk when stream a big file.
-
-#### DROPBOX_TOKEN
-
-- Set your dropbox app token.
-- Setup an app [here](https://www.dropbox.com/developers/apps)
-- 
-#### MEGA_EMAIL
-
-- Set your mega email.
-
-#### MEGA_PASS
-
-- Set your mega password.
-
-## Scripts
-
-```bash
-npm run dev
-# or
-npm run build
-# or
-npm run start
-```
