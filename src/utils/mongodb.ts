@@ -6,8 +6,8 @@ import { runCommand } from "#utils";
 
 export async function discloudToAtlas() {
     console.log(ck.blue(`Exporting database from discloud to mongodb atlas.`));
-    const dumpCommand = `mongodump --uri="${env.LOCALHOST_URI}" ${env.DB_NAME ? `--db=${env.DB_NAME}` : ""} ${env.COLLECTION_NAME ? `--collection=${env.COLLECTION_NAME}` : ""} --out=${env.OUT_DIR}`;
-    const exportCommand = `mongorestore --uri="${env.ATLAS_URI}" ${env.OUT_DIR}/`;
+    const dumpCommand = `mongodump --uri="${env.MONGO_LOCALHOST_URI}" ${env.MONGO_DB_NAME ? `--db=${env.MONGO_DB_NAME}` : ""} ${env.MONGO_COLLECTION_NAME ? `--collection=${env.MONGO_COLLECTION_NAME}` : ""} --out=${env.MONGO_OUT_DIR}`;
+    const exportCommand = `mongorestore --uri="${env.ATLAS_URI}" ${env.MONGO_OUT_DIR}/`;
 
     await runCommand(dumpCommand);
     await runCommand(exportCommand);
@@ -15,8 +15,8 @@ export async function discloudToAtlas() {
 
 export async function atlasToDiscloud() {
     console.log(ck.blue(`Exporting database from mongodb atlas to discloud.`));
-    const dumpCommand = `mongodump --uri="${env.ATLAS_URI}" ${env.DB_NAME ? `--db=${env.DB_NAME}` : ""} ${env.COLLECTION_NAME ? `--collection=${env.COLLECTION_NAME}` : ""} --out=${env.OUT_DIR}`;
-    const exportCommand = `mongorestore --uri="${env.LOCALHOST_URI}" ${env.OUT_DIR}/`;
+    const dumpCommand = `mongodump --uri="${env.ATLAS_URI}" ${env.MONGO_DB_NAME ? `--db=${env.MONGO_DB_NAME}` : ""} ${env.MONGO_COLLECTION_NAME ? `--collection=${env.MONGO_COLLECTION_NAME}` : ""} --out=${env.MONGO_OUT_DIR}`;
+    const exportCommand = `mongorestore --uri="${env.MONGO_LOCALHOST_URI}" ${env.MONGO_OUT_DIR}/`;
 
     await runCommand(dumpCommand);
     await runCommand(exportCommand);

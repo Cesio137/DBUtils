@@ -1,36 +1,20 @@
-# Setup Documentation
+# Setup
 
-## Download and Install
+## Prerequisites
 
-- [Nodejs 22 LTS or above](https://nodejs.org/)
-- [MongoDB database tools](https://www.mongodb.com/try/download/database-tools)
-## Env vars
+- [Node.js (v22 LTS or higher)](https://nodejs.org/)
+- [MongoDB Database Tools](https://www.mongodb.com/try/download/database-tools)
 
-#### TASK
+## Environment Variables
 
-- Set script task to import ou export
-- Default values: `import` and `export`
+Create a `.env` file in the root of the project and add the following variables:
 
-#### DB_NAME=""
+- `TASK`: The script's task. Use `import` to import data or `export` to export data.
 
-- Specify a database
-- It's optional
+#### MongoDB
 
-#### COLLECTION_NAME
-
-- Specify a collection
-- It's optional but if set you must set `DB_NAME` too
-
-#### LOCALHOST_URI
-
-- Localhost database uri
-
-#### ATLAS_URI
-
-- Mongodb atlas database uri
-
-#### OUT_DIR
-
-- Dir to save data
-
-
+- `MONGO_DB_NAME`: **(Optional)** The name of the database to connect to.
+- `MONGO_COLLECTION_NAME`: **(Optional)** The name of the collection to use. Requires `MONGO_DB_NAME` to be set.
+- `MONGO_LOCALHOST_URI`: The connection URI for your local MongoDB instance.
+- `ATLAS_URI`: The connection URI for your MongoDB Atlas cluster.
+- `MONGO_OUT_DIR`: The directory path to save exported data.
