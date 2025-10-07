@@ -40,9 +40,6 @@
     "#helpers": [
       "./build/helpers/index.js"
     ],
-    "#types": [
-      "./build/types/index.js"
-    ],
     "#utils": [
       "./build/utils/index.js"
     ]

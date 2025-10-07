@@ -20,7 +20,6 @@
       "paths": {
         "#env": ["./env.ts"],
         "#helpers": ["./helpers/index.ts"],
-        "#types": ["./types/index.ts"],
         "#utils": ["./utils/index.ts"]
       }
     },
