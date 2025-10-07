@@ -31,19 +31,18 @@
     | month        | 1-12 (or names)                   |
     | day of week  | 0-7 (or names, 0 or 7 are sunday) |
 
-#### DISCLOUD_TOKEN
+#### MongoDB
 
-- Your discloud api key.
-  
-#### APPID
-
-- Set the app id of your database.
+- `MONGO_DB_NAME`: **(Optional)** The name of the database to connect to.
+- `MONGO_COLLECTION_NAME`: **(Optional)** The name of the collection to use. Requires `MONGO_DB_NAME` to be set.
+- `MONGO_LOCALHOST_URI`: The connection URI for your local MongoDB instance.
+- `MONGO_OUT_DIR`: The directory path to save exported data.
 
 
 #### DRIVEPATH
 
 - Defines the destination path for the uploaded file within the cloud storage service.
-- For Dropbox, use a full path format like `/example/text.txt.`
+- Use a full path format like `/` for store in root or `/<folder name>` to store inside a folder
 
 #### DROPBOX_TOKEN
 
