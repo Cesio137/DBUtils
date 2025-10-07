@@ -13,7 +13,7 @@ function validateSchema() {
         MONGO_OUT_DIR: z.string("Output file name is required").min(1),
     }));
 
-    if (typeof envSchema.COLLECTION_NAME == "string" && typeof envSchema.DB_NAME == "undefined") {
+    if (typeof envSchema.MONGO_COLLECTION_NAME == "string" && typeof envSchema.MONGO_DB_NAME == "undefined") {
         console.log(ck.red("Env var DB_NAME must be set if COLLECTION_NAME has been set"));
         process.exit(-1);
     }
