@@ -1,41 +1,35 @@
-import fetch from "node-fetch";
+import fs from "node:fs";
 import { Dropbox } from 'dropbox';
 import ck from "chalk";
 import { env } from '#env';
-import { user } from '#tools';
+import { dump } from "#utils";
 
 const dropbox = new Dropbox({ accessToken: env.DROPBOX_TOKEN });
 
 export async function dbxUpload() {
-    const app = await user.apps.fetch(env.APPID);
-    const backup = await app.backup();
-    const url = backup.url;
-
-    const response = await fetch(url);
-    if (!response.ok || !response.body) {
-        console.log(ck.red("Failed to download file from discloud"));
-        return;
-    }
-    const stream = response.body;
-
+    const file = await dump();
+    const fstream = fs.createReadStream(`./${file}`);
+    
     try {
         let sessionId: string | undefined;
         let offset = 0;
-        for await (const chunk of stream) {
+        let chunkData: string | Buffer<ArrayBufferLike>;
+        for await (const chunk of fstream) {
+            chunkData = chunk;
             if (!sessionId) {
                 const response = await dropbox.filesUploadSessionStart({
                     close: false,
-                    contents: chunk
+                    contents: chunkData
                 });
                 sessionId = response.result.session_id;
             } else {
                 await dropbox.filesUploadSessionAppendV2({
                     cursor: { session_id: sessionId, offset },
                     close: false,
-                    contents: chunk
+                    contents: chunkData
                 });
             }
-            offset += chunk.length;
+            offset += chunkData.length;
         }
 
         if (!sessionId) {
@@ -46,7 +40,8 @@ export async function dbxUpload() {
         await dropbox.filesUploadSessionFinish({
             cursor: { session_id: sessionId, offset: offset },
             commit: {
-                path: env.DRIVEPATH || `/${app.name}.zip`,
+                // Normalize path to avoid double slashes (//)
+                path: `${env.DRIVEPATH.endsWith("/") ? env.DRIVEPATH.slice(0, -1) : env.DRIVEPATH}/${file}`,
                 mode: { ".tag": "add" },
                 autorename: true,
                 mute: false

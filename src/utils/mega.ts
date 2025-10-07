@@ -1,8 +1,8 @@
+import fs, { statSync } from "node:fs";
 import { env } from "#env";
 import { Storage } from "megajs";
 import ck from "chalk";
-import { user } from "#tools";
-import { Readable } from "stream";
+import { dump } from "#utils";
 
 export async function getLoggedInStorage() {
     const email = env.MEGA_EMAIL!
@@ -14,31 +14,17 @@ export async function getLoggedInStorage() {
 }
 
 export async function megaUpload() {
-    const app = await user.apps.fetch(env.APPID);
-    const backup = await app.backup();
-    const url = backup.url;
-
-    const response = await fetch(url);
-    if (!response.ok || !response.body) {
-        console.log(ck.red("Failed to download file from discloud"));
-        return;
-    }
-
-    // Convert webstream to node readble
-    let stream: Readable;
-    if (typeof response.body.getReader === "function") {
-        stream = Readable.fromWeb(response.body as never);
-    } else {
-        stream = response.body as never;
-    }
+    const filepath = await dump();
+    const fstream = fs.createReadStream(`./${filepath}`);
+    const { size } = statSync(filepath);
 
     try {
         const storage = await getLoggedInStorage();
 
         const file = await storage.upload({
-            name: env.DRIVEPATH || `/${app.name}.zip`,
-            size: parseInt(response.headers.get("content-length") || "0"),
-        }, stream as never).complete;
+            name: `${env.DRIVEPATH.endsWith("/") ? env.DRIVEPATH.slice(0, -1) : env.DRIVEPATH}/${filepath}`,
+            size: size,
+        }, fstream as never).complete;
 
         console.log(ck.blueBright(`${file.name} has been uploaded.`));
         await storage.close();
